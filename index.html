@@ -8,16 +8,39 @@ function makePinCopy(data){
  const topic=String(data.title||'Article').replace(/\s+/g,' ').trim();
  const finance=data.brand==='affordbase.com';
  const frames=finance?['Understand {t}','Your Guide to {t}','Planning Ahead: {t}','Explore {t}']:['Make {t}','On the Menu: {t}','Recipe Spotlight: {t}','Try {t}'];
- const descriptions=finance?[
- `Looking into ${topic}? Explore the full article on ${data.brand} and use it as a starting point for your research. Save this guide for your next planning session.`,
- `Put ${topic} on your reading list. Visit ${data.brand} for the full discussion, then consider how the topic relates to your own situation.`,
- `Before your next money planning session, read about ${topic} on ${data.brand}. Keep this Pin handy so you can return to the article when you need it.`,
- `Curious about ${topic}? Open the complete guide at ${data.brand}, explore the details, and bookmark it for another look.`
+ const groups=finance?[
+ [/rent|rental|roommate/i,['rent affordability','monthly housing costs','rental budget','household expenses']],
+ [/mortgage|homeownership|house|home buying|rent vs.? buy/i,['housing affordability','home buying costs','mortgage planning','monthly housing budget']],
+ [/salary|take.home|paycheck|income tax/i,['take-home pay','salary budgeting','net income','paycheck planning']],
+ [/car|vehicle|auto loan/i,['car financing','vehicle costs','auto budget','loan comparison']],
+ [/debt|credit|loan|installment/i,['debt management','credit planning','monthly payments','borrowing costs']],
+ [/saving|emergency fund/i,['savings goals','emergency savings','saving money','monthly savings plan']],
+ [/subscription/i,['subscription costs','recurring expenses','monthly spending','subscription budget']],
+ [/budget|50.30.20|zero.based/i,['monthly budgeting','budget planning','expense tracking','money management']]
  ]:[
- `Bring ${topic} to your recipe collection. Find the ingredients and full instructions on ${data.brand}, and save this Pin for when you are ready to cook.`,
- `What is next on your menu? Take a look at ${topic} on ${data.brand}. Open the recipe to review the ingredients and cooking steps before you get started.`,
- `A closer look at ${topic}: visit ${data.brand} for the complete recipe. Keep the instructions nearby while you cook and add this idea to your meal inspiration board.`,
- `Ready to try ${topic}? Head to ${data.brand} for the full ingredient list and method. Share this recipe idea with someone you would like to cook with.`
+ [/chicken/i,['chicken recipes','chicken meal ideas','homemade chicken dishes','chicken recipe inspiration']],
+ [/salmon|fish|shrimp|seafood/i,['seafood recipes','fish and seafood meal ideas','homemade seafood dishes','seafood recipe inspiration']],
+ [/beef/i,['beef recipes','beef meal ideas','homemade beef dishes','beef recipe inspiration']],
+ [/pasta|orzo|spaghetti|noodle/i,['pasta recipes','pasta meal ideas','homemade pasta dishes','pasta recipe inspiration']],
+ [/soup|stew/i,['soup recipes','homemade soups','soup and stew ideas','comfort food recipes']],
+ [/cookie|cake|dessert|brownie/i,['dessert recipes','homemade desserts','baking inspiration','sweet treat ideas']],
+ [/salad/i,['salad recipes','salad inspiration','homemade salads','salad meal ideas']],
+ [/breakfast|pancake|oatmeal/i,['breakfast recipes','morning meal ideas','homemade breakfast','breakfast inspiration']]
+ ];
+ const matched=groups.filter(([pattern])=>pattern.test(topic));
+ const keywords=[...new Set(matched.flatMap(([,words])=>words))];
+ if(!keywords.length)keywords.push(...(finance?['personal finance','money planning','household finances','financial organization']:['recipe inspiration','home cooking','meal ideas','homemade food']));
+ const k=i=>keywords[i%keywords.length];
+ const descriptions=finance?[
+ `${topic}: explore ${k(0)} and ${k(1)} for a clearer approach to everyday financial decisions. Save this idea for your next planning session.`,
+ `Make room for ${topic} in your financial planning. Keep ${k(2)} and ${k(3)} in focus as you review your own priorities.`,
+ `Thinking about ${topic}? Connect ${k(1)} with ${k(2)} and organize the questions that matter to your household finances.`,
+ `Build your knowledge of ${topic} with a focus on ${k(3)} and ${k(0)}. A personal finance idea to keep handy for future planning.`
+ ]:[
+ `${topic} for your next cooking session. Explore ${k(0)} and ${k(1)}, and save this recipe inspiration for your meal planning collection.`,
+ `Add ${topic} to your recipe ideas. Bring together ${k(2)} and ${k(3)} when planning what to cook next.`,
+ `Looking for ${k(1)}? Keep ${topic} on your list of ${k(2)} and discover a new idea for your home cooking routine.`,
+ `Let ${topic} inspire your next homemade meal. Save this idea alongside ${k(3)} and ${k(0)} for future cooking inspiration.`
  ];
  return frames.map((frame,i)=>{const room=100-frame.replace('{t}','').length;return {title:frame.replace('{t}',topic.length>room?topic.slice(0,room-1).trimEnd()+'…':topic),description:descriptions[i].slice(0,500)}});
 }
