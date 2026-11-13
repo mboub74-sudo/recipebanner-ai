@@ -32,15 +32,15 @@ function makePinCopy(data){
  if(!keywords.length)keywords.push(...(finance?['personal finance','money planning','household finances','financial organization']:['recipe inspiration','home cooking','meal ideas','homemade food']));
  const k=i=>keywords[i%keywords.length];
  const descriptions=finance?[
- `${topic}: explore ${k(0)} and ${k(1)} for a clearer approach to everyday financial decisions. Save this idea for your next planning session.`,
- `Make room for ${topic} in your financial planning. Keep ${k(2)} and ${k(3)} in focus as you review your own priorities.`,
- `Thinking about ${topic}? Connect ${k(1)} with ${k(2)} and organize the questions that matter to your household finances.`,
- `Build your knowledge of ${topic} with a focus on ${k(3)} and ${k(0)}. A personal finance idea to keep handy for future planning.`
+ `${topic}: explore ${k(0)}, ${k(1)}, and ${k(2)} for a clearer approach to everyday financial decisions. Save this idea for your next planning session.`,
+ `Make room for ${topic} in your financial planning. Keep ${k(2)}, ${k(3)}, and ${k(0)} in focus as you review your own priorities.`,
+ `Thinking about ${topic}? Connect ${k(1)}, ${k(2)}, and ${k(3)}, and organize the questions that matter to your household finances.`,
+ `Build your knowledge of ${topic} with a focus on ${k(3)}, ${k(0)}, and ${k(1)}. A personal finance idea to keep handy for future planning.`
  ]:[
- `${topic} for your next cooking session. Explore ${k(0)} and ${k(1)}, and save this recipe inspiration for your meal planning collection.`,
- `Add ${topic} to your recipe ideas. Bring together ${k(2)} and ${k(3)} when planning what to cook next.`,
- `Looking for ${k(1)}? Keep ${topic} on your list of ${k(2)} and discover a new idea for your home cooking routine.`,
- `Let ${topic} inspire your next homemade meal. Save this idea alongside ${k(3)} and ${k(0)} for future cooking inspiration.`
+ `${topic} for your next cooking session. Explore ${k(0)}, ${k(1)}, and ${k(2)}, and save this recipe inspiration for your meal planning collection.`,
+ `Add ${topic} to your recipe ideas. Bring together ${k(2)}, ${k(3)}, and ${k(0)} when planning what to cook next.`,
+ `Looking for ${k(1)}? Keep ${topic} on your list of ${k(2)} with ${k(3)} for your home cooking routine.`,
+ `Let ${topic} inspire your next homemade meal. Save this idea alongside ${k(3)}, ${k(0)}, and ${k(1)} for future cooking inspiration.`
  ];
  return frames.map((frame,i)=>{const room=100-frame.replace('{t}','').length;return {title:frame.replace('{t}',topic.length>room?topic.slice(0,room-1).trimEnd()+'…':topic),description:descriptions[i].slice(0,500)}});
 }
